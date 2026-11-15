@@ -65,6 +65,10 @@ The build places the generated `simulator.js` and `simulator.wasm` beside the pa
 
 Alternatively, run `python -m http.server 8000 --directory web` and open `http://localhost:8000`.
 
+## GitHub Pages deployment
+
+The Pages workflow builds the browser application from `web/` and uploads only `build-wasm/site/`; it runs on pushes to `develop`. In the repository's **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**. The legacy branch-root source publishes the `develop` repository root, where GitHub Pages/Jekyll can render `README.md` instead of the calculator.
+
 ## Project status
 
 The core illustrative calculation engine and responsive browser MVP are implemented. Automated tests cover arithmetic, validation, the fixture, both scenarios, fee options, and scenario independence. Regulatory/GST review, cross-browser/accessibility review, and release readiness remain outstanding; see [docs/10_ROADMAP.md](docs/10_ROADMAP.md).

@@ -20,6 +20,7 @@ The test groups cover:
 - Minimum (editable illustrative default), Full, and Custom main payments.
 - Invalid/missing custom payment, overpayment, negative/invalid inputs and zero periods.
 - The approved main illustrative example and the standalone missed-payment golden fixture.
+- The integrated Minimum-to-missed-payment flow with independent expectations: ₹99,146.17 main balance; ₹3,513.70 additional interest; ₹632.47 GST on interest; ₹750.00 fee; ₹135.00 GST on fee; ₹5,031.17 charges; ₹1,04,177.34 final estimate.
 - Default, all predefined, and custom late-fee amounts.
 - Main-to-optional result handoff, optional recalculation, and state independence.
 - The C API contract used by WebAssembly.
@@ -32,6 +33,12 @@ The browser app is built with Emscripten from the same C++ library. UI checks sh
 - Minimum/Full/Custom inputs recalculate the main result.
 - Late-fee changes recalculate only Scenario B.
 - Invalid inputs display errors and clear stale result values.
-- A 390px mobile viewport has no horizontal overflow.
+- A 320px, 360px, and 390px viewport has no horizontal overflow.
 
-The current implementation has been exercised in the integrated browser at a 390px viewport. Cross-browser and full accessibility audits remain release tasks.
+These browser checks passed in the integrated browser. Cross-browser and full accessibility audits remain release tasks.
+
+## Continuous integration
+
+[`.github/workflows/ci.yml`](../.github/workflows/ci.yml) configures an Ubuntu C++20 CMake build and CTest run for pushes and pull requests targeting `develop`. The workflow is configured locally; its first GitHub-hosted execution remains pending. A local Linux run was unavailable because CMake is not installed in the available WSL distribution.
+
+Record the hosted run result here after the workflow first executes.

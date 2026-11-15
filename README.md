@@ -38,6 +38,17 @@ ctest --test-dir build -C Release --output-on-failure
 
 The calculation library has no third-party dependencies. Tests use CTest and a small in-repository test runner.
 
+## CI and verified results
+
+The GitHub Actions workflow is configured to run the C++20 CMake configure, build, and CTest suite on pushes to `develop` and pull requests targeting `develop`. It has read-only repository contents permission and does not deploy. The first GitHub-hosted run is pending a push or pull request. A local Linux run was unavailable because CMake is not installed in the available WSL distribution.
+
+Local verification on the current implementation:
+
+- Native Visual Studio Debug build succeeded; CTest passed (1/1 target, 14/14 test groups).
+- The integrated regression uses the main calculator's ₹99,146.17 result and ₹95,000.00 unpaid principal. Scenario B independently expects ₹3,513.70 interest, ₹632.47 GST on interest, ₹750.00 fee, ₹135.00 GST on fee, ₹5,031.17 additional charges, and ₹1,04,177.34 final balance. This is separate from the standalone golden fixture.
+- A clean WebAssembly build succeeded. `simulator.js` and `simulator.wasm` were produced in `build-wasm/site/`, copied to `web/`, and verified byte-for-byte; the generated copies are Git-ignored.
+- Browser checks verified Minimum, Full, and Custom payments; the initially collapsed optional card; predefined and custom fee updates without changing the main result; invalid-input error/clearing behavior; and no horizontal overflow at 320px, 360px, or 390px.
+
 ## Build and run the browser app
 
 The presentation is static HTML/CSS/JavaScript; all financial calculations and validation run in the C++ WebAssembly module. Install CMake, Ninja, Python, and the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html). If Emscripten is installed under `%USERPROFILE%\emsdk`, build the browser app:

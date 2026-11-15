@@ -147,6 +147,36 @@ void test_main_minimum_full_and_custom_payments() {
     require(custom.value().remaining_principal.to_string() == "75000.00", "Custom remaining principal");
 }
 
+void test_integrated_minimum_and_missed_payment_regression() {
+    const auto main = ccsim::MainScenarioCalculator::calculate(main_input(ccsim::PaymentMode::Minimum));
+    require(main.has_value(), "Integrated main scenario succeeds");
+    require(main.value().payment_amount.to_string() == "5000.00", "Integrated payment");
+    require(main.value().remaining_principal.to_string() == "95000.00", "Integrated remaining principal");
+    require(main.value().interest.to_string() == "3513.70", "Integrated main interest");
+    require(main.value().gst_on_interest.to_string() == "632.47", "Integrated main GST");
+    require(main.value().estimated_next_balance.to_string() == "99146.17", "Integrated main next balance");
+
+    const auto missed = ccsim::MissedPaymentSimulator::calculate({
+        main.value().estimated_next_balance,
+        main.value().remaining_principal,
+        rate(4500),
+        30,
+        365,
+        money("750.00"),
+        rate(1800),
+        true});
+    require(missed.has_value(), "Integrated missed-payment scenario succeeds");
+    require(missed.value().starting_balance.to_string() == "99146.17", "Integrated starting balance");
+    require(missed.value().interest.to_string() == "3513.70", "Integrated additional interest");
+    require(missed.value().gst_on_interest.to_string() == "632.47", "Integrated GST on interest");
+    require(missed.value().late_fee.to_string() == "750.00", "Integrated late fee");
+    require(missed.value().gst_on_late_fee.to_string() == "135.00", "Integrated GST on late fee");
+    require(missed.value().total_additional_charges.to_string() == "5031.17",
+            "Integrated total additional charges");
+    require(missed.value().estimated_new_balance.to_string() == "104177.34",
+            "Integrated final estimated balance");
+}
+
 void test_main_boundaries_and_errors() {
     auto input = main_input(ccsim::PaymentMode::Full);
     input.statement_amount = money("0.00");
@@ -312,6 +342,7 @@ int main() {
         {"tax rounding", test_tax_rounding},
         {"missed-payment golden scenario", test_missed_payment_golden_scenario},
         {"main minimum, full and custom payments", test_main_minimum_full_and_custom_payments},
+        {"integrated minimum and missed-payment regression", test_integrated_minimum_and_missed_payment_regression},
         {"main boundaries and errors", test_main_boundaries_and_errors},
         {"missed scenario consumes main result independently", test_missed_scenario_uses_main_result_without_interest_on_gst},
         {"late fee options and custom amount", test_late_fee_options_and_custom_amount},

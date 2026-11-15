@@ -1,0 +1,35 @@
+
+{
+  "schema_version": 1,
+  "currency": "INR",
+  "rounding": "round-half-up-to-paise-per-line",
+  "scenarios": [
+    {
+      "id": "missed-payment-example-001",
+      "description": "Illustrative missed-payment calculation",
+      "inputs": {
+        "starting_balance": "99146.17",
+        "annual_interest_rate_percent": "45",
+        "period_days": 30,
+        "day_count_basis": 365,
+        "late_fee": "750.00",
+        "gst_rate_percent": "18"
+      },
+      "expected": {
+        "interest": "3667.05",
+        "gst_on_interest": "660.07",
+        "late_fee": "750.00",
+        "gst_on_late_fee": "135.00",
+        "total_additional_charges": "5212.12",
+        "resulting_balance": "104358.29"
+      },
+      "assumptions": [
+        "Entire starting balance is interest-bearing for 30 days",
+        "No payment or transaction during the period",
+        "Late fee applies",
+        "GST assumptions apply",
+        "No interest on tax or fees"
+      ]
+    }
+  ]
+}

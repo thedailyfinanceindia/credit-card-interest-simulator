@@ -35,7 +35,7 @@ For the approved simple MVP estimate, show an editable illustrative percentage w
 2. Paying the minimum amount does not generally stop interest.
 3. Missing a payment can introduce additional charges and reporting consequences.
 
-The main estimate uses a fixed illustrative period of 30 days and a 365-day basis; no statement or due date is required. It treats the entered balance as eligible principal and does not model previously accrued or unbilled charges.
+The main estimate uses an editable illustrative period, defaulting to 45 days, and a 365-day basis; no statement or due date is required. The selected period is a simplified approximation, not a universal bank rule or the actual duration for every transaction. It treats the entered balance as eligible principal and does not model previously accrued or unbilled charges.
 
 ## 3. Optional Missed-Payment Scenario
 

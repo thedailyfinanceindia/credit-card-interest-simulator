@@ -3,6 +3,9 @@
 const mainForm = document.querySelector("#main-form");
 const statementAmount = document.querySelector("#statement-amount");
 const annualRate = document.querySelector("#annual-rate");
+const interestPeriodDays = document.querySelector("#interest-period-days");
+const interestPeriodWrap = document.querySelector("#interest-period-wrap");
+const periodNote = document.querySelector("#period-note");
 const minimumRate = document.querySelector("#minimum-rate");
 const customPayment = document.querySelector("#custom-payment");
 const minimumRateField = document.querySelector("#minimum-rate-field");
@@ -20,6 +23,12 @@ let currentMainResult;
 
 function selectedPaymentMode() {
   return Number(mainForm.querySelector('input[name="payment-mode"]:checked').value);
+}
+
+function selectedInterestPeriodDays() {
+  return selectedPaymentMode() === 1
+    ? interestPeriodDays.defaultValue
+    : interestPeriodDays.value;
 }
 
 function setCurrency(id, amount) {
@@ -58,7 +67,8 @@ function readMainResult() {
     annualRate.value,
     selectedPaymentMode(),
     customPayment.value,
-    minimumRate.value
+    minimumRate.value,
+    selectedInterestPeriodDays()
   ]);
 }
 
@@ -113,7 +123,8 @@ function renderMissed() {
     currentMainResult.estimatedNextBalance,
     currentMainResult.remainingPrincipal,
     annualRate.value,
-    selectedLateFee()
+    selectedLateFee(),
+    selectedInterestPeriodDays()
   ]);
   if (!result.ok) {
     showError(missedError, result.error);
@@ -138,10 +149,16 @@ function updatePaymentFields() {
   minimumRateField.hidden = mode !== 0;
   customPaymentField.hidden = mode !== 2;
   customPayment.required = mode === 2;
+  interestPeriodDays.disabled = mode === 1;
+  interestPeriodWrap.classList.toggle("is-disabled", mode === 1);
+  periodNote.textContent = mode === 1
+    ? "Not used for Full payment"
+    : "(illustrative assumption)";
   updateMain();
 }
 
 mainForm.addEventListener("input", updateMain);
+interestPeriodDays.addEventListener("input", updateMain);
 mainForm.addEventListener("change", event => {
   if (event.target.name === "payment-mode") {
     updatePaymentFields();

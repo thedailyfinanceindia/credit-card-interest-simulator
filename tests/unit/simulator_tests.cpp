@@ -56,7 +56,7 @@ ccsim::MainScenarioInput main_input(ccsim::PaymentMode mode) {
         mode,
         std::nullopt,
         rate(500),
-        30,
+        45,
         365,
         rate(1800)};
 }
@@ -130,13 +130,15 @@ void test_main_minimum_full_and_custom_payments() {
     require(minimum.has_value(), "Minimum scenario succeeds");
     require(minimum.value().payment_amount.to_string() == "5000.00", "Minimum payment uses 5% assumption");
     require(minimum.value().remaining_principal.to_string() == "95000.00", "Minimum remaining principal");
-    require(minimum.value().interest.to_string() == "3513.70", "Main interest");
-    require(minimum.value().gst_on_interest.to_string() == "632.47", "Main GST");
-    require(minimum.value().estimated_next_balance.to_string() == "99146.17", "Main estimated balance");
+    require(minimum.value().interest.to_string() == "5270.55", "45-day main interest");
+    require(minimum.value().gst_on_interest.to_string() == "948.70", "45-day main GST");
+    require(minimum.value().estimated_next_balance.to_string() == "101219.25", "45-day main estimated balance");
 
     auto full = ccsim::MainScenarioCalculator::calculate(main_input(ccsim::PaymentMode::Full));
     require(full.has_value(), "Full scenario succeeds");
     require(full.value().payment_amount.to_string() == "100000.00", "Full payment amount");
+    require(full.value().interest.to_string() == "0.00", "Full payment has no new interest");
+    require(full.value().gst_on_interest.to_string() == "0.00", "Full payment has no new GST");
     require(full.value().estimated_next_balance.to_string() == "0.00", "Full payment has no new modeled charges");
 
     auto custom_input = main_input(ccsim::PaymentMode::Custom);
@@ -147,33 +149,56 @@ void test_main_minimum_full_and_custom_payments() {
     require(custom.value().remaining_principal.to_string() == "75000.00", "Custom remaining principal");
 }
 
+void test_main_interest_periods() {
+    auto input = main_input(ccsim::PaymentMode::Minimum);
+    require(input.period_days == 45, "Main test input defaults to 45 days");
+
+    input.period_days = 30;
+    const auto thirty_day = ccsim::MainScenarioCalculator::calculate(input);
+    require(thirty_day.has_value(), "30-day main calculation succeeds");
+    require(thirty_day.value().interest.to_string() == "3513.70", "30-day interest");
+    require(thirty_day.value().gst_on_interest.to_string() == "632.47", "30-day GST");
+    require(thirty_day.value().estimated_next_balance.to_string() == "99146.17", "30-day next balance");
+
+    input.period_days = 60;
+    const auto custom_period = ccsim::MainScenarioCalculator::calculate(input);
+    require(custom_period.has_value(), "Custom interest period calculation succeeds");
+    require(custom_period.value().interest.to_string() == "7027.40", "60-day interest");
+    require(custom_period.value().gst_on_interest.to_string() == "1264.93", "60-day GST");
+    require(custom_period.value().estimated_next_balance.to_string() == "103292.33",
+            "60-day next balance");
+
+    input.period_days = 0;
+    require(!ccsim::MainScenarioCalculator::calculate(input).has_value(), "Zero-day main period rejected");
+}
+
 void test_integrated_minimum_and_missed_payment_regression() {
     const auto main = ccsim::MainScenarioCalculator::calculate(main_input(ccsim::PaymentMode::Minimum));
     require(main.has_value(), "Integrated main scenario succeeds");
     require(main.value().payment_amount.to_string() == "5000.00", "Integrated payment");
     require(main.value().remaining_principal.to_string() == "95000.00", "Integrated remaining principal");
-    require(main.value().interest.to_string() == "3513.70", "Integrated main interest");
-    require(main.value().gst_on_interest.to_string() == "632.47", "Integrated main GST");
-    require(main.value().estimated_next_balance.to_string() == "99146.17", "Integrated main next balance");
+    require(main.value().interest.to_string() == "5270.55", "Integrated main interest");
+    require(main.value().gst_on_interest.to_string() == "948.70", "Integrated main GST");
+    require(main.value().estimated_next_balance.to_string() == "101219.25", "Integrated main next balance");
 
     const auto missed = ccsim::MissedPaymentSimulator::calculate({
         main.value().estimated_next_balance,
         main.value().remaining_principal,
         rate(4500),
-        30,
+        45,
         365,
         money("750.00"),
         rate(1800),
         true});
     require(missed.has_value(), "Integrated missed-payment scenario succeeds");
-    require(missed.value().starting_balance.to_string() == "99146.17", "Integrated starting balance");
-    require(missed.value().interest.to_string() == "3513.70", "Integrated additional interest");
-    require(missed.value().gst_on_interest.to_string() == "632.47", "Integrated GST on interest");
+    require(missed.value().starting_balance.to_string() == "101219.25", "Integrated starting balance");
+    require(missed.value().interest.to_string() == "5270.55", "Integrated additional interest");
+    require(missed.value().gst_on_interest.to_string() == "948.70", "Integrated GST on interest");
     require(missed.value().late_fee.to_string() == "750.00", "Integrated late fee");
     require(missed.value().gst_on_late_fee.to_string() == "135.00", "Integrated GST on late fee");
-    require(missed.value().total_additional_charges.to_string() == "5031.17",
+    require(missed.value().total_additional_charges.to_string() == "7104.25",
             "Integrated total additional charges");
-    require(missed.value().estimated_new_balance.to_string() == "104177.34",
+    require(missed.value().estimated_new_balance.to_string() == "108323.50",
             "Integrated final estimated balance");
 }
 
@@ -215,7 +240,7 @@ void test_missed_scenario_uses_main_result_without_interest_on_gst() {
         main.value().estimated_next_balance,
         main.value().remaining_principal,
         rate(4500),
-        30,
+        45,
         365,
         money("750.00"),
         rate(1800),
@@ -223,7 +248,7 @@ void test_missed_scenario_uses_main_result_without_interest_on_gst() {
     require(optional.has_value(), "Optional calculation consumes main result");
     require(optional.value().starting_balance.paise() == main.value().estimated_next_balance.paise(),
             "Optional starting balance comes from main output");
-    require(optional.value().interest.to_string() == "3513.70",
+    require(optional.value().interest.to_string() == "5270.55",
             "Optional interest excludes prior GST and charges");
 
     const auto original_main_balance = main.value().estimated_next_balance.to_string();
@@ -231,7 +256,7 @@ void test_missed_scenario_uses_main_result_without_interest_on_gst() {
         main.value().estimated_next_balance,
         main.value().remaining_principal,
         rate(4500),
-        30,
+        45,
         365,
         money("1200.00"),
         rate(1800),
@@ -251,7 +276,7 @@ void test_missed_scenario_uses_main_result_without_interest_on_gst() {
         changed_main.value().estimated_next_balance,
         changed_main.value().remaining_principal,
         rate(4500),
-        30,
+        45,
         365,
         money("750.00"),
         rate(1800),
@@ -317,19 +342,51 @@ void test_rate_boundaries() {
 }
 
 void test_calculation_api_contract() {
-    const std::string main_json = ccsim_main_result("100000.00", "45", 0, "", "5");
+    const std::string main_json = ccsim_main_result("100000.00", "45", 0, "", "5", "45");
     require(main_json.find("\"ok\":true") != std::string::npos, "Main API returns success JSON");
-    require(main_json.find("\"estimatedNextBalance\":\"99146.17\"") != std::string::npos,
+    require(main_json.find("\"estimatedNextBalance\":\"101219.25\"") != std::string::npos,
             "Main API returns calculated balance");
 
+    const std::string custom_period_json =
+        ccsim_main_result("100000.00", "45", 0, "", "5", "60");
+    require(custom_period_json.find("\"interest\":\"7027.40\"") != std::string::npos,
+            "Main API uses a custom interest period");
+    require(custom_period_json.find("\"estimatedNextBalance\":\"103292.33\"") != std::string::npos,
+            "Main API returns the custom-period balance");
+
     const std::string missed_json =
-        ccsim_missed_result("99146.17", "99146.17", "45", "750");
+        ccsim_missed_result("99146.17", "99146.17", "45", "750", "30");
     require(missed_json.find("\"totalAdditionalCharges\":\"5212.12\"") != std::string::npos,
             "Missed API returns golden charges");
 
-    const std::string invalid_json = ccsim_main_result("-1", "45", 0, "", "5");
+    const std::string integrated_missed_json =
+        ccsim_missed_result("101219.25", "95000.00", "45", "750", "45");
+    require(integrated_missed_json.find("\"interest\":\"5270.55\"") != std::string::npos,
+            "Missed API uses the main scenario's selected period and principal");
+    require(integrated_missed_json.find("\"estimatedNewBalance\":\"108323.50\"") != std::string::npos,
+            "Missed API returns the integrated final balance");
+
+    const std::string invalid_json = ccsim_main_result("-1", "45", 0, "", "5", "45");
     require(invalid_json.find("\"ok\":false") != std::string::npos,
             "Main API returns explicit validation error");
+    const std::string zero_days_json = ccsim_main_result("100000", "45", 0, "", "5", "0");
+    require(zero_days_json.find("\"ok\":false") != std::string::npos,
+            "Main API rejects a zero-day period");
+    const std::string fractional_days_json =
+        ccsim_main_result("100000", "45", 0, "", "5", "1.5");
+    require(fractional_days_json.find("\"ok\":false") != std::string::npos,
+            "Main API rejects fractional days");
+    const std::string negative_days_json =
+        ccsim_missed_result("99146.17", "99146.17", "45", "750", "-1");
+    require(negative_days_json.find("\"ok\":false") != std::string::npos,
+            "Missed API rejects negative days");
+    const std::string empty_days_json = ccsim_main_result("100000", "45", 0, "", "5", "");
+    require(empty_days_json.find("\"ok\":false") != std::string::npos,
+            "Main API rejects an empty period");
+    const std::string oversized_days_json =
+        ccsim_missed_result("99146.17", "99146.17", "45", "750", "4294967296");
+    require(oversized_days_json.find("\"ok\":false") != std::string::npos,
+            "Missed API rejects an out-of-range period");
 }
 
 }  // namespace
@@ -342,6 +399,7 @@ int main() {
         {"tax rounding", test_tax_rounding},
         {"missed-payment golden scenario", test_missed_payment_golden_scenario},
         {"main minimum, full and custom payments", test_main_minimum_full_and_custom_payments},
+        {"main 30-day, 45-day, and custom periods", test_main_interest_periods},
         {"integrated minimum and missed-payment regression", test_integrated_minimum_and_missed_payment_regression},
         {"main boundaries and errors", test_main_boundaries_and_errors},
         {"missed scenario consumes main result independently", test_missed_scenario_uses_main_result_without_interest_on_gst},

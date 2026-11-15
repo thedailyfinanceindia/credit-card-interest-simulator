@@ -73,11 +73,11 @@ Options:
 
 ### Warnings
 
-Paying the minimum does not stop interest.
+Keep the main minimum-payment warning and missed-payment warning visible and concise. Put longer interest-free-period, APR, compounding, RBI past-due timing, issuer-fee, and illustrative-assumption explanations in collapsed expandable disclosures.
 
-Late fees depend on the card issuer and outstanding amount.
+State that the 5% minimum payment and listed late-fee choices are illustrative, not universal RBI rules. Identify the 18% GST rate as an illustrative assumption.
 
-The simulator assumes the payment remains unpaid beyond the applicable period for the missed-payment scenario.
+Provide a compact expandable list of charges excluded from the estimate. The final disclaimer must state that actual billing depends on transaction dates, payment dates, payment allocation, refunds, reversals, and issuer-specific terms.
 
 ## Visual Principles
 
@@ -96,4 +96,4 @@ The simulator assumes the payment remains unpaid beyond the applicable period fo
 - Provide clear validation messages.
 - Do not communicate warnings through colour alone.
 
-The main calculator uses a fixed illustrative 30-day/365-day period and does not request dates. The optional missed-payment card remains collapsed by default and receives both the starting total and unpaid principal from the main calculation.
+The main calculator places the editable interest-period control directly after the interest estimate in the result breakdown. It defaults to 45 days, is disabled for Full payment, and includes an information disclosure explaining the illustrative assumption and transaction-date limitation. Editing it recalculates the main result and, when expanded, Scenario B. No dates are requested. The optional missed-payment card remains collapsed by default, uses the same selected period, and receives both the starting total and unpaid principal from the main calculation.

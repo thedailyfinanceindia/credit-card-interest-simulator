@@ -30,6 +30,7 @@ Statuses: NOT STARTED / IN PROGRESS / BLOCKED / DONE.
 - [x] Implement MainScenarioCalculator.
 - [x] Implement MissedPaymentSimulator.
 - [x] Implement InputValidator.
+- [x] Support an editable 45-day-default interest period and test 30-day, default, custom, and invalid periods.
 - [x] Add unit tests for the implemented financial functions.
 - [x] Pass the missed-payment golden test case.
 - [x] Add integrated main-to-missed-payment regression with independent expected values.
@@ -37,6 +38,7 @@ Statuses: NOT STARTED / IN PROGRESS / BLOCKED / DONE.
 ## Stage 3: User Interface
 
 - [x] Build main calculator.
+- [x] Add editable illustrative interest-period input; Scenario B reuses the selected period.
 - [x] Add Minimum / Full / Custom selection.
 - [x] Display itemized results.
 - [x] Add optional missed-payment card.
@@ -50,6 +52,7 @@ Statuses: NOT STARTED / IN PROGRESS / BLOCKED / DONE.
 - [ ] Financial calculation review.
 - [ ] Regulatory review.
 - [ ] Accessibility testing.
+- [ ] Browser-test the editable interest-period control and Scenario B period recalculation.
 - [x] Edge-case testing for implemented calculations.
 - [ ] Cross-browser testing, if applicable.
 - [ ] Release readiness review.

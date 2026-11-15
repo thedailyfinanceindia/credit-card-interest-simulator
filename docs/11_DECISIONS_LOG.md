@@ -157,6 +157,20 @@ Reason:
 
 This keeps business and financial logic in C++, permits a mobile-first browser UI, and avoids a server or runtime package dependency.
 
+## D-014: Editable 45-Day Illustrative Interest Period
+
+Status: APPROVED - ILLUSTRATIVE MVP ASSUMPTION
+
+Decision:
+
+The main calculator defaults to an editable 45-day simple-interest period using the existing 365-day basis. The user-selected period is passed consistently to the optional missed-payment scenario. Existing principal handoff, APR, GST, rounding, and Full Payment behavior remain unchanged. The application does not calculate transaction-level balances or recurring monthly compounding.
+
+Reason:
+
+A longer editable period offers a useful simplified billing-cycle illustration when the interest-free period may be lost. It is not a claim about actual transaction-date duration, an RBI-prescribed period, or a universal issuer practice.
+
+This decision supersedes only D-012's 30-day period assumption; other D-012 assumptions remain in force. The separate missed-payment golden fixture continues to use its explicit 30-day period.
+
 ## OPEN DECISIONS
 
 1. Verify current GST applicability/rates/taxable bases against CBIC/GST Council primary sources before release.

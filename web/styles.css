@@ -148,6 +148,69 @@ h2 {
   font-weight: 650;
 }
 
+.field-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-title-row label {
+  min-width: 0;
+}
+
+.period-help {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.period-help > summary {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--blue);
+  background: #eef5ff;
+  cursor: pointer;
+  list-style: none;
+}
+
+.period-help > summary::-webkit-details-marker {
+  display: none;
+}
+
+.period-help > summary svg {
+  width: 16px;
+  height: 16px;
+}
+
+.period-help > summary:focus-visible {
+  outline: 3px solid rgb(23 92 211 / 25%);
+  outline-offset: 2px;
+}
+
+.period-help-content {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(280px, calc(100vw - 48px));
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: #35445c;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(23 36 59 / 12%);
+  font-size: 0.78rem;
+  font-weight: 450;
+  line-height: 1.5;
+}
+
+.period-help-content p {
+  margin: 0;
+}
+
 .input-wrap {
   display: flex;
   align-items: center;
@@ -312,6 +375,66 @@ input:focus-visible {
   white-space: nowrap;
 }
 
+.breakdown > .breakdown-period {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  align-items: center;
+  gap: 16px;
+}
+
+.breakdown-period dt {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.period-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.period-label label {
+  min-width: 0;
+  cursor: pointer;
+}
+
+.period-value {
+  display: grid;
+  min-width: 0;
+  justify-items: end;
+  gap: 3px;
+  white-space: normal;
+}
+
+.period-input-wrap {
+  width: 120px;
+  min-height: 40px;
+  gap: 6px;
+  padding: 0 9px;
+  font-size: 0.88rem;
+}
+
+.period-input-wrap input {
+  padding: 8px 0;
+}
+
+.period-input-wrap.is-disabled {
+  border-color: #e1e6ee;
+  color: #8490a2;
+  background: #f3f5f8;
+}
+
+.period-input-wrap input:disabled {
+  color: #8490a2;
+  cursor: not-allowed;
+}
+
+.period-value .field-note {
+  font-size: 0.68rem;
+  font-weight: 450;
+}
+
 .breakdown-total dt,
 .breakdown-total dd {
   color: var(--ink);
@@ -319,15 +442,25 @@ input:focus-visible {
 }
 
 .notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   margin-top: 20px;
-  padding: 14px 16px;
-  border-radius: 11px;
-  font-size: 0.85rem;
-  line-height: 1.55;
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
 
 .notice p {
-  margin: 3px 0 0;
+  margin: 0;
+}
+
+.notice-icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
 }
 
 .notice-warning {
@@ -337,8 +470,68 @@ input:focus-visible {
   background: var(--warning-bg);
 }
 
-.notice-warning strong {
-  color: #543c0c;
+.info-details {
+  margin-top: 4px;
+}
+
+.info-details summary {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 2px;
+  color: var(--blue-dark);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  list-style: none;
+}
+
+.info-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-details summary::after {
+  content: "+";
+  display: grid;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--blue);
+  background: #eef5ff;
+  font-size: 1rem;
+}
+
+.info-details[open] summary::after {
+  content: "−";
+}
+
+.info-details summary:focus-visible {
+  outline: 3px solid rgb(23 92 211 / 25%);
+  outline-offset: 2px;
+}
+
+.info-details-content {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.info-details-content p {
+  margin: 0;
+}
+
+.info-details-content ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.info-details-content li + li {
+  margin-top: 5px;
 }
 
 .assumptions {
@@ -481,6 +674,21 @@ select {
 
   .breakdown > div {
     font-size: 0.85rem;
+  }
+
+  .notice {
+    gap: 8px;
+    margin-top: 14px;
+    padding: 10px 11px;
+    font-size: 0.81rem;
+  }
+
+  .info-details summary {
+    min-height: 44px;
+  }
+
+  .info-details-content {
+    font-size: 0.78rem;
   }
 
   .optional-card > summary {

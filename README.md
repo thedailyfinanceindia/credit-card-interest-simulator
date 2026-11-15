@@ -9,6 +9,7 @@ An educational calculator for Indian credit-card users, published by Daily Finan
 - Enter a statement/outstanding balance and annual interest rate.
 - Choose Minimum, Full, or Custom payment.
 - Minimum uses an editable 5% illustrative assumption by default; it is not a universal bank rule.
+- The illustrative interest period defaults to 45 days and can be changed.
 - Review payment, remaining principal, interest, assumed GST on interest, and estimated next balance.
 
 ### Optional missed-payment scenario
@@ -20,7 +21,7 @@ An educational calculator for Indian credit-card users, published by Daily Finan
 
 ### Disclosed calculation assumptions
 
-The simplified main scenario treats the entered balance as eligible principal, subtracts the selected payment, and estimates interest on the unpaid principal for 30 days using a 365-day basis. Each interest/tax line is rounded half up to paise. The model does not reconstruct issuer billing, transaction dates, payment allocation, interest-free-period rules, or prior accrued/unbilled interest. The 18% GST rate is an illustrative input from the supplied test scenario, not a universal tax conclusion.
+The simplified main scenario treats the entered balance as eligible principal, subtracts the selected payment, and applies simple interest to the unpaid principal for the selected period (45 days by default) using a 365-day basis. Each interest/tax line is rounded half up to paise. This is not a transaction-date billing model: actual interest duration and balances can depend on transaction dates, payment dates and allocations, and issuer terms. Repeated carried balances may accrue interest over multiple billing cycles; this simulator does not model recurring monthly compounding. The model also excludes prior accrued/unbilled interest. The 18% GST rate is an illustrative assumption, not a universal tax conclusion.
 
 The missed-payment golden fixture assumes the entire supplied starting balance is interest-bearing. In the interactive flow, Scenario B instead uses Scenario A's unpaid principal as the interest-bearing amount and its estimated next balance as the starting total, so it does not charge new interest on the prior GST line.
 
@@ -40,14 +41,14 @@ The calculation library has no third-party dependencies. Tests use CTest and a s
 
 ## CI and verified results
 
-The GitHub Actions workflow is configured to run the C++20 CMake configure, build, and CTest suite on pushes to `develop` and pull requests targeting `develop`. It has read-only repository contents permission and does not deploy. The first GitHub-hosted run is pending a push or pull request. A local Linux run was unavailable because CMake is not installed in the available WSL distribution.
+The GitHub Actions workflow is configured to run the C++20 CMake configure, build, and CTest suite on pushes to `develop` and pull requests targeting `develop`. It has read-only repository contents permission and does not deploy. The first GitHub-hosted run is pending a push or pull request.
 
 Local verification on the current implementation:
 
-- Native Visual Studio Debug build succeeded; CTest passed (1/1 target, 14/14 test groups).
-- The integrated regression uses the main calculator's ₹99,146.17 result and ₹95,000.00 unpaid principal. Scenario B independently expects ₹3,513.70 interest, ₹632.47 GST on interest, ₹750.00 fee, ₹135.00 GST on fee, ₹5,031.17 additional charges, and ₹1,04,177.34 final balance. This is separate from the standalone golden fixture.
-- A clean WebAssembly build succeeded. `simulator.js` and `simulator.wasm` were produced in `build-wasm/site/`, copied to `web/`, and verified byte-for-byte; the generated copies are Git-ignored.
-- Browser checks verified Minimum, Full, and Custom payments; the initially collapsed optional card; predefined and custom fee updates without changing the main result; invalid-input error/clearing behavior; and no horizontal overflow at 320px, 360px, or 390px.
+- Native Visual Studio Debug build succeeded; CTest passed (1/1 target, 15/15 test groups).
+- The 45-day integrated regression expects ₹5,270.55 interest, ₹948.70 GST and a ₹1,01,219.25 main balance. Scenario B reuses its ₹95,000.00 unpaid principal and selected 45-day period; its expected interest is ₹5,270.55, GST on interest ₹948.70, fee ₹750.00, GST on fee ₹135.00, additional charges ₹7,104.25, and final balance ₹1,08,323.50. These values are independently asserted and separate from the 30-day standalone golden fixture.
+- The WebAssembly `simulator_web` build succeeded. `simulator.js` and `simulator.wasm` were produced in `build-wasm/site/` and copied to `web/`; generated copies are Git-ignored. The new editable period control has not yet been browser-tested.
+- Earlier browser checks covered Minimum, Full, and Custom payments; the initially collapsed optional card; fee updates without changing the main result; invalid-input behavior; and mobile widths. Those checks predate the new period control.
 
 ## Build and run the browser app
 

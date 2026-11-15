@@ -18,6 +18,8 @@ Create a credit-card simulator that demonstrates the financial impact of paying 
 
 The minimum payment calculation must be configurable and must not assume every bank uses 5%.
 
+For the approved simple MVP estimate, show an editable illustrative percentage with a 5% default, applied to the entered statement amount and capped at that amount. This is a user-adjustable estimate, not the issuer's MAD formula. No rupee minimum/floor is assumed.
+
 ### Outputs
 
 - Statement amount.
@@ -32,6 +34,8 @@ The minimum payment calculation must be configurable and must not assume every b
 1. Banks may calculate MAD differently. The percentage used is an estimate.
 2. Paying the minimum amount does not generally stop interest.
 3. Missing a payment can introduce additional charges and reporting consequences.
+
+The main estimate uses a fixed illustrative period of 30 days and a 365-day basis; no statement or due date is required. It treats the entered balance as eligible principal and does not model previously accrued or unbilled charges.
 
 ## 3. Optional Missed-Payment Scenario
 

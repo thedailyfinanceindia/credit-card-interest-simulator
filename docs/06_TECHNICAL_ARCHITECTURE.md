@@ -55,34 +55,34 @@ Responsible for:
 - Validating payment amounts.
 - Preventing invalid calculations.
 
-## 3. Suggested C++ Directory Structure
+## 3. Implemented Directory Structure
 
 src/
   domain/
-    money.h
-    rate.h
-    scenario_types.h
+    result.hpp
+    money.hpp / money.cpp
+    rate.hpp / rate.cpp
 
   calculation/
-    interest_calculator.h
-    interest_calculator.cpp
-    tax_calculator.h
-    tax_calculator.cpp
-    main_scenario_calculator.h
-    main_scenario_calculator.cpp
-    missed_payment_simulator.h
-    missed_payment_simulator.cpp
+    interest_calculator.hpp / .cpp
+    percentage_calculator.hpp / .cpp
+    tax_calculator.hpp / .cpp
+    main_scenario_calculator.hpp / .cpp
+    missed_payment_simulator.hpp / .cpp
 
   validation/
-    input_validator.h
-    input_validator.cpp
+    input_validator.hpp / .cpp
 
   app/
-    main.cpp
+    wasm_api.hpp / wasm_api.cpp
+
+web/
+  index.html
+  styles.css
+  app.js
 
 tests/
-  unit/
-  integration/
+  unit/simulator_tests.cpp
   test-data/
 
 ## 4. Data Flow
@@ -115,6 +115,7 @@ Main UI Result       Optional Missed Payment
 ## 5. Architecture Rules
 
 - No financial formulas inside UI components.
+- The JavaScript layer never computes money, rates, tax, or interest.
 - No duplicated calculation logic.
 - No hidden financial assumptions.
 - No unnecessary global state.
@@ -122,20 +123,21 @@ Main UI Result       Optional Missed Payment
 - Use deterministic calculation functions.
 - Keep the engine modular.
 
+The approved illustrative Month 1 model is documented in the financial specification and decisions log. It remains distinct from issuer-specific billing methodology.
+
 ## 6. Technology Decisions
 
-To be finalized:
+Implementation decisions:
 
-- Target platform.
-- UI framework.
-- C++ standard.
-- Build system.
-- Unit testing framework.
-- Deployment approach.
+- C++20 for the calculation library.
+- CMake for reproducible native builds and CTest integration.
+- A small in-repository test runner instead of a third-party test dependency.
+- The financial library has no UI or network dependencies.
+- Static HTML/CSS and minimal JavaScript for responsive presentation; C++ calculations are compiled to WebAssembly using Emscripten.
+- No backend, account, database, or network calculation service.
+- CTest covers the native C++ library and API wrapper; WebAssembly is built as the static browser application.
 
-CMake and GoogleTest are candidates, not approved decisions.
-
-Do not select technologies without documenting the decision.
+JavaScript only collects control values, calls the C++ WebAssembly API, and renders returned results. No financial or business calculation is implemented in browser JavaScript.
 
 ## 7. Non-Functional Requirements
 

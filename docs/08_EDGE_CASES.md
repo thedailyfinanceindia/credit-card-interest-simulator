@@ -24,7 +24,7 @@
 3. Custom payment.
 4. Payment equals statement amount.
 5. Payment leaves zero balance.
-6. Minimum due exceeds statement amount.
+6. Minimum percentage is capped at 100% of the statement amount.
 7. Main calculation produces zero interest.
 
 ## Missed-Payment Simulator
@@ -49,6 +49,8 @@
 - Changing late fee must not change main result.
 - Changing main inputs must update the optional scenario.
 - Hiding optional scenario must not destroy main inputs.
+
+The test suite covers the main-result handoff, fee-option recalculation, and invalid-result clearing. Browser checks additionally verify that the optional card is collapsed initially and that a mobile-width viewport has no horizontal overflow.
 
 ## Financial Limitations
 

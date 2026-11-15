@@ -9,6 +9,7 @@
       "description": "Illustrative missed-payment calculation",
       "inputs": {
         "starting_balance": "99146.17",
+        "interest_bearing_principal": "99146.17",
         "annual_interest_rate_percent": "45",
         "period_days": 30,
         "day_count_basis": 365,
@@ -29,6 +30,32 @@
         "Late fee applies",
         "GST assumptions apply",
         "No interest on tax or fees"
+      ]
+    },
+    {
+      "id": "main-minimum-illustration-001",
+      "description": "Approved illustrative Month 1 minimum-payment calculation",
+      "inputs": {
+        "statement_amount": "100000.00",
+        "minimum_due_rate_percent": "5",
+        "annual_interest_rate_percent": "45",
+        "period_days": 30,
+        "day_count_basis": 365,
+        "gst_rate_percent": "18"
+      },
+      "expected": {
+        "payment_amount": "5000.00",
+        "remaining_principal": "95000.00",
+        "interest": "3513.70",
+        "gst_on_interest": "632.47",
+        "estimated_next_balance": "99146.17"
+      },
+      "assumptions": [
+        "Minimum due rate is user-editable and illustrative, not universal",
+        "Entire entered statement amount is treated as eligible principal",
+        "Interest is charged only on the unpaid principal for 30 days",
+        "GST is a separate 18% scenario assumption",
+        "No statement dates, transactions, payment allocation, or prior accrued charges are modeled"
       ]
     }
   ]

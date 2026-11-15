@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Credit Card Minimum Due Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="simulator.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <a class="brand" href="#" aria-label="Daily Finance India home">
+        <span class="brand-mark" aria-hidden="true">DF</span>
+        <span>Daily Finance India</span>
+      </a>
+      <p class="eyebrow">CREDIT CARD EDUCATION</p>
+      <h1>Credit Card Minimum Due Calculator</h1>
+      <p class="intro">See how a payment choice can affect your estimated balance.</p>
+    </header>
+
+    <section class="calculator-card" aria-labelledby="main-calculator-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SCENARIO A</p>
+          <h2 id="main-calculator-title">Your statement</h2>
+        </div>
+        <span class="estimate-tag">Illustrative estimate</span>
+      </div>
+
+      <form id="main-form" novalidate>
+        <div class="input-grid">
+          <label class="field">
+            <span>Statement amount</span>
+            <span class="input-wrap">
+              <span aria-hidden="true">₹</span>
+              <input id="statement-amount" name="statement-amount" type="text"
+                inputmode="decimal" autocomplete="off" value="100000.00" aria-describedby="main-error">
+            </span>
+          </label>
+          <label class="field">
+            <span>Annual interest rate</span>
+            <span class="input-wrap suffix">
+              <input id="annual-rate" name="annual-rate" type="text"
+                inputmode="decimal" autocomplete="off" value="45" aria-describedby="main-error">
+              <span aria-hidden="true">%</span>
+            </span>
+          </label>
+        </div>
+
+        <fieldset class="payment-options">
+          <legend>Payment selection</legend>
+          <div class="radio-row">
+            <label class="radio-card">
+              <input type="radio" name="payment-mode" value="0" checked>
+              <span>Minimum</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="payment-mode" value="1">
+              <span>Full</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="payment-mode" value="2">
+              <span>Custom</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="input-grid assumption-grid">
+          <label class="field" id="minimum-rate-field">
+            <span>Illustrative minimum payment</span>
+            <span class="input-wrap suffix">
+              <input id="minimum-rate" name="minimum-rate" type="text"
+                inputmode="decimal" autocomplete="off" value="5" aria-describedby="mad-note main-error">
+              <span aria-hidden="true">%</span>
+            </span>
+            <span class="field-note" id="mad-note">Editable estimate; issuers set their own MAD terms.</span>
+          </label>
+          <label class="field" id="custom-payment-field" hidden>
+            <span>Custom payment amount</span>
+            <span class="input-wrap">
+              <span aria-hidden="true">₹</span>
+              <input id="custom-payment" name="custom-payment" type="text"
+                inputmode="decimal" autocomplete="off" aria-describedby="main-error">
+            </span>
+          </label>
+        </div>
+        <p id="main-error" class="error-message" role="alert" hidden></p>
+      </form>
+
+      <div id="main-results" class="results" aria-live="polite">
+        <div class="result-hero">
+          <span>Estimated next balance</span>
+          <strong id="main-next-balance">—</strong>
+        </div>
+        <dl class="breakdown">
+          <div><dt>Payment amount</dt><dd id="main-payment">—</dd></div>
+          <div><dt>Remaining balance</dt><dd id="main-remaining">—</dd></div>
+          <div><dt>Interest estimate</dt><dd id="main-interest">—</dd></div>
+          <div><dt>GST on interest <span class="muted">(assumed 18%)</span></dt><dd id="main-gst">—</dd></div>
+        </dl>
+      </div>
+
+      <div class="notice notice-warning">
+        <strong>Important</strong>
+        <p>Paying the minimum does not generally stop interest. The entered balance is treated as eligible principal for this simple estimate.</p>
+      </div>
+      <p class="assumptions">Assumptions: 30 days, a 365-day year, no new transactions, and no interest on tax or fees. Full payment shows no new illustrative interest; previously accrued or unbilled amounts are not modeled.</p>
+    </section>
+
+    <details id="missed-scenario" class="optional-card">
+      <summary>What if I miss next month's payment?</summary>
+      <div class="optional-content">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">SCENARIO B</p>
+            <h2>What happens if you miss the next payment?</h2>
+          </div>
+        </div>
+
+        <label class="field fee-field">
+          <span>Illustrative late-payment fee</span>
+          <select id="late-fee" name="late-fee">
+            <option value="500.00">₹500</option>
+            <option value="750.00" selected>₹750</option>
+            <option value="1200.00">₹1,200</option>
+            <option value="1300.00">₹1,300</option>
+            <option value="custom">Custom amount</option>
+          </select>
+        </label>
+        <label class="field custom-fee-field" id="custom-fee-field" hidden>
+          <span>Custom late fee</span>
+          <span class="input-wrap">
+            <span aria-hidden="true">₹</span>
+            <input id="custom-fee" name="custom-fee" type="text"
+              inputmode="decimal" autocomplete="off" aria-describedby="missed-error">
+          </span>
+        </label>
+        <p id="missed-error" class="error-message" role="alert" hidden></p>
+
+        <div id="missed-results" class="results" aria-live="polite">
+          <div class="result-hero">
+            <span>Final estimated balance</span>
+            <strong id="missed-final-balance">—</strong>
+          </div>
+          <dl class="breakdown">
+            <div><dt>Starting balance from Scenario A</dt><dd id="missed-starting-balance">—</dd></div>
+            <div><dt>Additional interest</dt><dd id="missed-interest">—</dd></div>
+            <div><dt>GST on interest <span class="muted">(assumed 18%)</span></dt><dd id="missed-gst-interest">—</dd></div>
+            <div><dt>Late-payment fee</dt><dd id="missed-late-fee">—</dd></div>
+            <div><dt>GST on late-payment fee <span class="muted">(assumed 18%)</span></dt><dd id="missed-gst-fee">—</dd></div>
+            <div class="breakdown-total"><dt>Total additional charges</dt><dd id="missed-total">—</dd></div>
+          </dl>
+        </div>
+
+        <div class="notice notice-warning">
+          <p>Late fees depend on your card issuer and outstanding amount. ₹750 is illustrative, not a universal bank charge. This scenario assumes the payment remains unpaid beyond the relevant period.</p>
+        </div>
+        <p class="assumptions">Scenario B uses Scenario A's estimated balance and unpaid principal. No interest is charged on tax or fees. Period: 30 days at a 365-day basis.</p>
+      </div>
+    </details>
+
+    <footer class="page-footer">
+      <p>This educational simulator is not a bank statement or financial advice. Actual charges depend on issuer terms, transaction history, payment timing, billing cycle and applicable regulations.</p>
+      <p id="engine-status" class="engine-status" role="status">Loading calculation engine…</p>
+    </footer>
+  </main>
+</body>
+</html>

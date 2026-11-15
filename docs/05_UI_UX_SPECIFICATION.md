@@ -20,6 +20,7 @@ Credit Card Minimum Due Calculator
 - Statement Amount
 - Annual Interest Rate
 - Minimum / Full / Custom payment selection
+- An editable illustrative minimum-payment percentage (5% default), visible when Minimum is selected
 
 ### Result Section
 
@@ -94,3 +95,5 @@ The simulator assumes the payment remains unpaid beyond the applicable period fo
 - Support keyboard navigation.
 - Provide clear validation messages.
 - Do not communicate warnings through colour alone.
+
+The main calculator uses a fixed illustrative 30-day/365-day period and does not request dates. The optional missed-payment card remains collapsed by default and receives both the starting total and unpaid principal from the main calculation.

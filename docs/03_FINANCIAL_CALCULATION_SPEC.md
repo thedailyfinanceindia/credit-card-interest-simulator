@@ -1,7 +1,7 @@
 
 # Financial Calculation Specification
 
-Status: Provisional. Financial model requires validation before public release.
+Status: Illustrative MVP model approved 15 November 2026. Issuer-specific and regulatory validation remains required before public release.
 
 ## 1. Monetary Precision
 
@@ -47,29 +47,29 @@ GST applicability and calculation basis must be validated against current tax ru
 
 ## 4. Main Scenario
 
-Illustrative inputs:
+### Approved MVP formula
 
-Statement Amount = ₹1,00,000
-Payment Made = ₹5,000
+The user enters a statement/outstanding amount, annual rate, and payment mode. No statement upload or date input is required.
 
-Supplied resulting balance:
+- Minimum payment = entered statement amount × editable illustrative MAD percentage (default 5%), rounded half up to paise and capped at the statement amount. No minimum rupee floor is assumed.
+- Full payment = the entered statement amount.
+- Custom payment = the user-entered amount; it cannot exceed the entered statement amount.
+- Remaining principal = statement amount − payment.
+- Interest = remaining principal × annual rate × 30 / 365, rounded half up to paise.
+- GST on interest = interest × the supplied illustrative GST rate (18% in the app and golden fixture), rounded half up to paise.
+- Estimated next balance = remaining principal + interest + GST on interest.
 
-₹99,146.17
+This model assumes the entire entered statement amount is eligible principal and that there are no separately identified taxes, fees, or prior accrued/unbilled interest in it. The model applies interest only to the unpaid principal and does not add tax or fees to the interest base. It is not a universal issuer methodology.
 
-Important:
+### Approved example
 
-This is an illustrative baseline supplied for the missed-payment scenario.
+Statement amount = ₹1,00,000; annual rate = 45%; illustrative MAD percentage = 5%; period = 30 days; day-count basis = 365; GST assumption = 18%.
 
-Do not reverse-engineer this figure or claim that the Month 1 calculation is universally correct.
+Payment = ₹5,000; remaining principal = ₹95,000; interest = ₹3,513.70; GST = ₹632.47; estimated next balance = ₹99,146.17.
 
-Before implementing the main engine, establish:
+This output happens to equal the previously supplied ₹99,146.17 provisional balance under the approved assumptions; it does not validate any bank's real MAD or billing methodology.
 
-- Exact MAD formula.
-- Payment allocation.
-- Interest-bearing principal.
-- Billing-cycle assumptions.
-- Interest-free-period treatment.
-- Tax and fee treatment.
+For Full payment, the model returns zero remaining principal, new interest, GST, and next balance. Previously accrued or unbilled amounts are explicitly outside this simplified scenario and are not represented as waived.
 
 ## 5. Optional Missed-Payment Scenario
 
@@ -134,6 +134,8 @@ The example assumes:
 - GST assumptions apply.
 - No interest is added on GST or fees.
 
+In the interactive flow, Scenario B consumes the MainScenarioResult: its starting balance is the main estimated next balance, while its new-interest principal is the main remaining principal. Thus prior main-scenario GST is included in the starting total but excluded from the new interest base. The standalone golden fixture explicitly assumes its entire ₹99,146.17 starting balance is interest-bearing, so its ₹3,667.05 interest result is a separate fixture case, not the integrated Scenario B interest base.
+
 ## 7. Real-World Limitations
 
 Actual issuer calculations may depend on:
@@ -150,7 +152,23 @@ Actual issuer calculations may depend on:
 
 The MVP must call this an illustrative interest estimate.
 
-## 8. Future Improvements
+## 8. Regulatory Research (Reviewed 15 November 2026)
+
+The RBI's [Master Direction - Credit Card and Debit Card - Issuance and Conduct Directions, 2022](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12300) is published as updated on 7 March 2024. The relevant provisions state, in summary:
+
+- Issuers determine rates under their board-approved policy and must disclose APR methodology with examples (paragraph 9(a) and 9(b)(i)).
+- Minimum Amount Due terms must avoid negative amortization; the direction does not prescribe one universal MAD percentage (paragraph 9(b)(ii)).
+- A card-issuer may report an account as past due or levy penal charges only when it has remained past due for more than three days; late charges are computed from the statement due date and apply only to the post-due outstanding, not the total amount due (paragraph 9(b)(v)).
+- Interest is levied only on the outstanding amount, adjusted for payments, refunds and reversed transactions (paragraph 9(b)(vi), and FAQ 6).
+- Unpaid taxes, levies and charges must not be capitalized for interest (paragraph 9(b)(ii), and FAQ 7).
+
+The official [SBI Card MITC](https://www.sbicard.com/en/most-important-terms-and-conditions.page) is an issuer-specific example, not a market-wide rule. Its published MAD example includes applicable taxes, EMI, fees/charges, finance charges, over-limit amounts and a percentage of the remaining balance, subject to a stated minimum. It also documents payment allocation and daily finance-charge examples. This demonstrates why those issuer practices cannot be inferred from a single statement amount.
+
+The RBI direction is the regulatory reference used for cautious product wording, not a complete issuer billing model. These sources were checked on 15 November 2026; the direction page identifies its consolidation date as 7 March 2024. Recheck for subsequent amendments and complete compliance review before release.
+
+The 18% GST rate in the supplied missed-payment fixture remains an explicit illustrative input. It is not, by itself, a claim that GST applies to every issuer charge or taxable amount. Current GST applicability and the taxable value for each charge remain a release-verification item against CBIC/GST Council primary sources.
+
+## 9. Future Improvements
 
 Possible future enhancements:
 

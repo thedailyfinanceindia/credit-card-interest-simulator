@@ -43,6 +43,10 @@ build/
 Build/
 build-*/
 
+# Generated WebAssembly browser assets
+/web/simulator.js
+/web/simulator.wasm
+
 # CMake generated files
 CMakeFiles/
 CMakeCache.txt

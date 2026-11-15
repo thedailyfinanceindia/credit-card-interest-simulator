@@ -7,15 +7,16 @@
 2. Enters statement amount.
 3. Reviews or changes annual interest rate.
 4. Selects Minimum.
-5. Reviews estimated payment.
-6. Sees interest and GST breakdown.
-7. Sees estimated next balance.
+5. Reviews or edits the illustrative minimum-payment percentage (5% by default).
+6. Reviews estimated payment.
+7. Sees interest and GST breakdown.
+8. Sees estimated next balance.
 
 ## Flow 2: Full Payment
 
 1. User enters statement amount.
 2. Selects Full.
-3. Calculator displays the result according to the documented full-payment assumptions.
+3. Calculator displays zero new modeled interest and clearly excludes previously accrued or unbilled amounts.
 
 Do not automatically assume that previously accrued or unbilled interest disappears.
 
@@ -47,3 +48,4 @@ Do not automatically assume that previously accrued or unbilled interest disappe
 - No bank selection.
 - No mandatory date input.
 - Invalid values must produce clear validation messages.
+- The illustrative main calculation uses 30 days and a 365-day basis.

@@ -6,7 +6,7 @@ std::optional<std::string> InputValidator::validate_payment(
     Money payment,
     Money statement_amount) {
     if (payment.paise() > statement_amount.paise()) {
-        return "Payment cannot exceed the statement amount";
+        return "Payment amount needs to be no higher than the statement amount";
     }
     return std::nullopt;
 }
@@ -15,7 +15,7 @@ std::optional<std::string> InputValidator::validate_period(
     std::uint32_t period_days,
     std::uint32_t day_count_basis) {
     if (period_days == 0) {
-        return "Calculation period must be greater than zero days";
+        return "Please enter a period of at least one day";
     }
     if (day_count_basis == 0) {
         return "Day-count basis must be greater than zero";

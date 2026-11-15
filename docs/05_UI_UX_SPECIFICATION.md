@@ -40,13 +40,13 @@ Collapsed by default.
 
 Button:
 
-"What if I miss next month's payment?"
+"Explore a missed-payment scenario"
 
 ### Expanded Card
 
 Title:
 
-"What happens if you miss the next payment?"
+"How a missed payment could affect the balance"
 
 Display:
 
@@ -88,6 +88,7 @@ Provide a compact expandable list of charges excluded from the estimate. The fin
 - No unnecessary animations.
 - Important results should be easy to understand.
 - Use warnings without fear-based messaging.
+- Describe scenarios without blaming or judging the user's choices.
 
 ## Accessibility
 

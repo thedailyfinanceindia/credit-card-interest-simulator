@@ -72,7 +72,7 @@ Outputs:
 
 A collapsed card:
 
-"What if I miss next month's payment?"
+"Explore a missed-payment scenario"
 
 When expanded:
 

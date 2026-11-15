@@ -58,18 +58,18 @@ ccsim::Result<ccsim::Rate> parse_rate(const char* value) {
 
 ccsim::Result<std::uint32_t> parse_period_days(const char* value) {
     if (value == nullptr || value[0] == '\0') {
-        return ccsim::Result<std::uint32_t>::failure("Enter the interest period in days");
+        return ccsim::Result<std::uint32_t>::failure("Please enter the interest period in days");
     }
 
     const std::string_view text(value);
     std::uint32_t days = 0;
     const auto parsed = std::from_chars(text.data(), text.data() + text.size(), days);
     if (parsed.ec == std::errc::result_out_of_range) {
-        return ccsim::Result<std::uint32_t>::failure("Interest period is too large");
+        return ccsim::Result<std::uint32_t>::failure("Please enter a smaller interest period");
     }
     if (parsed.ec != std::errc{} || parsed.ptr != text.data() + text.size()) {
         return ccsim::Result<std::uint32_t>::failure(
-            "Interest period must be a whole number of days");
+            "Please enter a whole number of days for the interest period");
     }
     return ccsim::Result<std::uint32_t>::success(days);
 }

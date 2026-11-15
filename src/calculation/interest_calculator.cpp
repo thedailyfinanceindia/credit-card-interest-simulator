@@ -24,7 +24,7 @@ Result<Money> InterestCalculator::calculate(
     std::uint32_t period_days,
     std::uint32_t day_count_basis) {
     if (period_days == 0) {
-        return Result<Money>::failure("Calculation period must be greater than zero days");
+        return Result<Money>::failure("Please enter a period of at least one day");
     }
     if (day_count_basis == 0) {
         return Result<Money>::failure("Day-count basis must be greater than zero");

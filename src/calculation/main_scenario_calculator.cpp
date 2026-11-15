@@ -18,7 +18,7 @@ Result<MainScenarioResult> MainScenarioCalculator::calculate(const MainScenarioI
             const auto rate = input.minimum_due_rate.basis_points();
             if (rate == 0 || rate > 10'000) {
                 return Result<MainScenarioResult>::failure(
-                    "Illustrative minimum-payment percentage must be greater than 0% and no more than 100%");
+                    "Please enter a minimum-payment percentage above 0% and no more than 100%");
             }
             const auto calculated = PercentageCalculator::calculate(
                 input.statement_amount,
@@ -33,7 +33,7 @@ Result<MainScenarioResult> MainScenarioCalculator::calculate(const MainScenarioI
             break;
         case PaymentMode::Custom:
             if (!input.custom_payment.has_value()) {
-                return Result<MainScenarioResult>::failure("Enter a custom payment amount");
+                return Result<MainScenarioResult>::failure("Please enter the custom payment amount");
             }
             payment = input.custom_payment.value();
             break;

@@ -32,8 +32,8 @@ For the approved simple MVP estimate, show an editable illustrative percentage w
 ### Warnings
 
 1. Banks may calculate MAD differently. The percentage used is an estimate.
-2. Paying the minimum amount does not generally stop interest.
-3. Missing a payment can introduce additional charges and reporting consequences.
+2. A minimum payment may leave part of the balance unpaid, and interest may continue to apply.
+3. A missed payment may lead to additional charges and reporting consequences, depending on issuer terms.
 
 The main estimate uses an editable illustrative period, defaulting to 45 days, and a 365-day basis; no statement or due date is required. The selected period is a simplified approximation, not a universal bank rule or the actual duration for every transaction. It treats the entered balance as eligible principal and does not model previously accrued or unbilled charges.
 
@@ -41,7 +41,7 @@ The main estimate uses an editable illustrative period, defaulting to 45 days, a
 
 Trigger:
 
-"What if I miss next month's payment?"
+"Explore a missed-payment scenario"
 
 The scenario is collapsed by default.
 

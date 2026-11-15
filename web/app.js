@@ -112,7 +112,7 @@ function renderMissed() {
     return;
   }
   if (!currentMainResult) {
-    showError(missedError, "Enter valid main-calculator inputs to estimate this scenario.");
+    showError(missedError, "Review the main calculator entries to see this estimate.");
     ["missed-final-balance", "missed-starting-balance", "missed-interest",
       "missed-gst-interest", "missed-late-fee", "missed-gst-fee", "missed-total"]
       .forEach(id => document.querySelector(`#${id}`).textContent = "—");
@@ -182,8 +182,8 @@ lateFee.addEventListener("change", () => {
 customFee.addEventListener("input", renderMissed);
 
 if (typeof createSimulatorModule !== "function") {
-  engineStatus.textContent = "Calculation engine is unavailable. Build the WebAssembly app before opening this page.";
-  showError(mainError, "The calculation engine did not load. Follow the build instructions in the README.");
+  engineStatus.textContent = "The calculator is unavailable right now.";
+  showError(mainError, "The calculator could not load. Please refresh the page and try again.");
 } else {
   createSimulatorModule()
     .then(module => {
@@ -192,8 +192,8 @@ if (typeof createSimulatorModule !== "function") {
       updatePaymentFields();
     })
     .catch(error => {
-      engineStatus.textContent = "Calculation engine failed to load.";
-      showError(mainError, "The calculation engine failed to load. Rebuild the WebAssembly app and try again.");
+      engineStatus.textContent = "The calculator could not load.";
+      showError(mainError, "The calculator could not load. Please refresh the page and try again.");
       console.error(error);
     });
 }

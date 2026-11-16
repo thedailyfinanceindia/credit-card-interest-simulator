@@ -41,7 +41,7 @@ The calculation library has no third-party dependencies. Tests use CTest and a s
 
 ## CI and verified results
 
-The GitHub Actions workflow is configured to run the C++20 CMake configure, build, and CTest suite on pushes to `develop` and pull requests targeting `develop`. It has read-only repository contents permission and does not deploy. The first GitHub-hosted run is pending a push or pull request.
+The GitHub Actions workflow runs the C++20 CMake configure, build, and CTest suite on pushes to `develop` and pull requests targeting `develop`. It has read-only repository contents permission and does not deploy. A GitHub-hosted run succeeded on `develop` on 16 November 2026.
 
 Local verification on the current implementation:
 
@@ -67,7 +67,7 @@ Alternatively, run `python -m http.server 8000 --directory web` and open `http:/
 
 ## GitHub Pages deployment
 
-The Pages workflow builds the browser application from `web/` and uploads only `build-wasm/site/`; it runs on pushes to `develop`. In the repository's **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**. The legacy branch-root source publishes the `develop` repository root, where GitHub Pages/Jekyll can render `README.md` instead of the calculator.
+The Pages workflow builds the browser application from `web/` and uploads only `build-wasm/site/`; it deploys on pushes to `main`. The C++ CI workflow remains independent and runs on pushes and pull requests targeting `develop`. In the repository's **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**. The legacy branch-root source can publish `README.md` and can race with the workflow deployment. The repository setting must be updated before the new `main` deployment can be verified.
 
 ## Project status
 

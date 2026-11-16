@@ -18,7 +18,7 @@ Statuses: NOT STARTED / IN PROGRESS / BLOCKED / DONE.
 - [x] Finalize C++ standard (C++20).
 - [x] Configure CMake.
 - [x] Configure dependency-free CTest test runner.
-- [x] Add GitHub Actions C++20 build-and-test workflow (first hosted run pending).
+- [x] Add GitHub Actions C++20 build-and-test workflow; hosted run succeeded on `develop`.
 - [x] Implement monetary representation.
 
 ## Stage 2: Calculation Engine
@@ -59,13 +59,13 @@ Statuses: NOT STARTED / IN PROGRESS / BLOCKED / DONE.
 
 ## Stage 5: Repository Quality and Automation
 
-- [x] Add least-permission GitHub Actions workflow for C++20 configure, build, and CTest; no deployment.
+- [x] Add least-permission GitHub Actions workflow for C++20 configure, build, and CTest; hosted run succeeded, no deployment.
+- [ ] Configure the Pages source as GitHub Actions and verify a successful WebAssembly site deployment from `main`.
 - [x] Add integrated financial regression test without reusing the standalone golden expectation.
 - [x] Clean-build WebAssembly and verify generated browser assets load.
 - [x] Verify Minimum, Full, Custom, optional scenario, fee changes, invalid inputs, state independence, and mobile widths in-browser.
-- [ ] Observe a successful GitHub-hosted workflow run (requires a push or pull request; local WSL lacks CMake).
 
-The MVP implementation is complete. The hosted CI run, final financial/regulatory review, full accessibility/cross-browser validation, and release readiness remain incomplete; the roadmap is not marked done.
+The MVP implementation and hosted CI validation are complete. Final financial/regulatory review, full accessibility/cross-browser validation, Pages source configuration, and release readiness remain incomplete; the roadmap is not marked done.
 
 ## Out of Scope
 

@@ -171,6 +171,20 @@ A longer editable period offers a useful simplified billing-cycle illustration w
 
 This decision supersedes only D-012's 30-day period assumption; other D-012 assumptions remain in force. The separate missed-payment golden fixture continues to use its explicit 30-day period.
 
+## D-015: GitHub Pages Deployment from Main
+
+Status: APPROVED - REPOSITORY DEPLOYMENT CONFIGURATION REQUIRED
+
+Decision:
+
+The GitHub Pages workflow builds the C++ WebAssembly site and deploys its generated `build-wasm/site/` artifact only when changes are pushed to `main`. The separate C++ CI workflow continues to validate pushes and pull requests targeting `develop`. GitHub Pages must use **GitHub Actions** as its publishing source.
+
+Reason:
+
+Publishing a generated artifact avoids exposing the repository root, where Jekyll may render `README.md`, and keeps integration testing on `develop` separate from production deployment.
+
+The repository's Pages source currently reports legacy branch publishing from `develop`; a repository administrator must change **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. Without that setting, GitHub's automatic branch deployment can race with or override the workflow deployment.
+
 ## OPEN DECISIONS
 
 1. Verify current GST applicability/rates/taxable bases against CBIC/GST Council primary sources before release.

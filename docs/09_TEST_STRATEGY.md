@@ -39,6 +39,4 @@ These browser checks passed in the integrated browser. Cross-browser and full ac
 
 ## Continuous integration
 
-[`.github/workflows/ci.yml`](../.github/workflows/ci.yml) configures an Ubuntu C++20 CMake build and CTest run for pushes and pull requests targeting `develop`. The workflow is configured locally; its first GitHub-hosted execution remains pending. A local Linux run was unavailable because CMake is not installed in the available WSL distribution.
-
-Record the hosted run result here after the workflow first executes.
+    [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) configures an Ubuntu C++20 CMake build and CTest run for pushes and pull requests targeting `develop`. The GitHub-hosted CI workflow completed successfully on `develop` on 16 November 2026.

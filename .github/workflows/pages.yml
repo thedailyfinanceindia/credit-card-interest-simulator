@@ -3,7 +3,7 @@ name: Deploy GitHub Pages
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch:
 
 permissions:
@@ -35,8 +35,11 @@ jobs:
       - name: Verify Pages output
         run: |
           test -s build-wasm/site/index.html
+          test -s build-wasm/site/app.js
+          test -s build-wasm/site/styles.css
           test -s build-wasm/site/simulator.js
           test -s build-wasm/site/simulator.wasm
+          test ! -e build-wasm/site/README.md
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

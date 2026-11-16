@@ -14,7 +14,7 @@ Status: Illustrative MVP model approved 15 November 2026. Issuer-specific and re
 
 ## 2. Interest Calculation
 
-For the simplified educational model:
+For the simplified educational model, the user selects a positive whole-number period in days. The UI defaults to 45 days; this is an illustrative assumption, not an RBI-prescribed period or universal issuer practice. No transaction or payment dates are requested.
 
 Interest = Principal × Annual Interest Rate × Number of Days / Day Count Basis
 
@@ -22,7 +22,7 @@ Example:
 
 Principal = ₹99,146.17
 Annual Interest Rate = 45%
-Number of Days = 30
+Number of Days = 30 for this standalone example
 Day Count Basis = 365
 
 Interest:
@@ -55,7 +55,7 @@ The user enters a statement/outstanding amount, annual rate, and payment mode. N
 - Full payment = the entered statement amount.
 - Custom payment = the user-entered amount; it cannot exceed the entered statement amount.
 - Remaining principal = statement amount − payment.
-- Interest = remaining principal × annual rate × 30 / 365, rounded half up to paise.
+- Interest = remaining principal × annual rate × selected period days / 365, rounded half up to paise.
 - GST on interest = interest × the supplied illustrative GST rate (18% in the app and golden fixture), rounded half up to paise.
 - Estimated next balance = remaining principal + interest + GST on interest.
 
@@ -63,15 +63,17 @@ This model assumes the entire entered statement amount is eligible principal and
 
 ### Approved example
 
-Statement amount = ₹1,00,000; annual rate = 45%; illustrative MAD percentage = 5%; period = 30 days; day-count basis = 365; GST assumption = 18%.
+Statement amount = ₹1,00,000; annual rate = 45%; illustrative MAD percentage = 5%; default period = 45 days; day-count basis = 365; GST assumption = 18%.
 
-Payment = ₹5,000; remaining principal = ₹95,000; interest = ₹3,513.70; GST = ₹632.47; estimated next balance = ₹99,146.17.
+Payment = ₹5,000; remaining principal = ₹95,000; interest = ₹5,270.55; GST = ₹948.70; estimated next balance = ₹1,01,219.25.
 
-This output happens to equal the previously supplied ₹99,146.17 provisional balance under the approved assumptions; it does not validate any bank's real MAD or billing methodology.
+For comparison, selecting 30 days produces interest of ₹3,513.70, GST of ₹632.47, and an estimated next balance of ₹99,146.17. Neither result validates any bank's real MAD or billing methodology.
 
 For Full payment, the model returns zero remaining principal, new interest, GST, and next balance. Previously accrued or unbilled amounts are explicitly outside this simplified scenario and are not represented as waived.
 
 ## 5. Optional Missed-Payment Scenario
+
+The following is the standalone 30-day golden fixture; it is separate from the interactive scenario, which inherits the selected period from Scenario A.
 
 Starting Balance = ₹99,146.17
 
@@ -124,7 +126,7 @@ GST = 18%
 
 ## 6. Important Assumptions
 
-The example assumes:
+The standalone golden example assumes:
 
 - Entire starting balance is interest-bearing.
 - Interest period is 30 days.
@@ -134,7 +136,7 @@ The example assumes:
 - GST assumptions apply.
 - No interest is added on GST or fees.
 
-In the interactive flow, Scenario B consumes the MainScenarioResult: its starting balance is the main estimated next balance, while its new-interest principal is the main remaining principal. Thus prior main-scenario GST is included in the starting total but excluded from the new interest base. The standalone golden fixture explicitly assumes its entire ₹99,146.17 starting balance is interest-bearing, so its ₹3,667.05 interest result is a separate fixture case, not the integrated Scenario B interest base.
+In the interactive flow, Scenario B consumes the MainScenarioResult and uses the same selected period as Scenario A: its starting balance is the main estimated next balance, while its new-interest principal is the main remaining principal. Thus prior main-scenario GST is included in the starting total but excluded from the new interest base. The standalone golden fixture explicitly assumes its entire ₹99,146.17 starting balance is interest-bearing for 30 days, so its ₹3,667.05 interest result is a separate fixture case, not the integrated Scenario B interest base.
 
 ## 7. Real-World Limitations
 
@@ -150,7 +152,9 @@ Actual issuer calculations may depend on:
 - Loss of interest-free period.
 - Issuer-specific terms.
 
-The MVP must call this an illustrative interest estimate.
+When the interest-free period is lost, interest may be calculated from transaction dates; actual interest duration varies by transaction and payment date. Repeated balances carried through real billing cycles may accrue interest over time. This simulator instead applies simple interest for one selected period; it does not model transaction-level billing or recurring monthly compounding.
+
+The MVP must call this an illustrative interest estimate. Its default 45-day period is an editable approximation and must not be presented as a regulatory requirement or universal bank practice.
 
 ## 8. Regulatory Research (Reviewed 15 November 2026)
 

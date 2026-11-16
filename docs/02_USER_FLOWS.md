@@ -31,7 +31,7 @@ Do not automatically assume that previously accrued or unbilled interest disappe
 ## Flow 4: Missed Next Payment
 
 1. User completes the main calculation.
-2. User taps "What if I miss next month's payment?"
+2. User opens "Explore a missed-payment scenario".
 3. Optional card expands.
 4. Starting balance is taken from the main result.
 5. Default late fee is ₹750.
@@ -48,4 +48,5 @@ Do not automatically assume that previously accrued or unbilled interest disappe
 - No bank selection.
 - No mandatory date input.
 - Invalid values must produce clear validation messages.
-- The illustrative main calculation uses 30 days and a 365-day basis.
+- The illustrative main calculation defaults to 45 days; users may edit the whole-number period. It uses a 365-day basis and makes clear that transaction-date interest may differ.
+- Scenario B uses the same selected interest period as Scenario A.

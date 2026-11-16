@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en-IN">
 <head>
+  
+  <!-- Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T7QV4S27');
+  </script>
+  <!-- End Google Tag Manager -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f7fb">
@@ -10,13 +21,22 @@
   <script src="app.js" defer></script>
 </head>
 <body>
+
+  
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7QV4S27"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <main class="page-shell">
     <header class="page-header">
       <a class="brand" href="#" aria-label="Daily Finance India home">
         <span class="brand-mark" aria-hidden="true">DF</span>
         <span>Daily Finance India</span>
       </a>
-      <p class="eyebrow">CREDIT CARD EDUCATION</p>
+      <p class="eyebrow">CREDIT CARD AWARENESS</p>
       <h1>Credit Card Minimum Due Calculator</h1>
       <p class="intro">See how a payment choice can affect your estimated balance.</p>
     </header>
@@ -99,24 +119,70 @@
           <div><dt>Payment amount</dt><dd id="main-payment">—</dd></div>
           <div><dt>Remaining balance</dt><dd id="main-remaining">—</dd></div>
           <div><dt>Interest estimate</dt><dd id="main-interest">—</dd></div>
-          <div><dt>GST on interest <span class="muted">(assumed 18%)</span></dt><dd id="main-gst">—</dd></div>
+          <div class="breakdown-period">
+            <dt>
+              <span class="period-label">
+                <label for="interest-period-days">Interest period</label>
+                <details class="period-help">
+                  <summary aria-label="About the illustrative interest period">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+                      <path d="M12 11v5m0-8h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path>
+                    </svg>
+                  </summary>
+                  <div class="period-help-content">
+                    <p>When the interest-free period is lost, interest may be calculated from transaction dates. Actual interest duration varies by transaction and payment date. This 45-day period is only an illustrative approximation.</p>
+                  </div>
+                </details>
+              </span>
+            </dt>
+            <dd class="period-value">
+              <span class="input-wrap suffix period-input-wrap" id="interest-period-wrap">
+                <input id="interest-period-days" name="interest-period-days" type="text"
+                  inputmode="numeric" autocomplete="off" value="45" aria-describedby="period-note main-error">
+                <span aria-hidden="true">days</span>
+              </span>
+              <span class="field-note" id="period-note">(illustrative assumption)</span>
+            </dd>
+          </div>
+          <div><dt>GST on interest <span class="muted">(illustrative 18%)</span></dt><dd id="main-gst">—</dd></div>
         </dl>
       </div>
 
-      <div class="notice notice-warning">
-        <strong>Important</strong>
-        <p>Paying the minimum does not generally stop interest. The entered balance is treated as eligible principal for this simple estimate.</p>
+      <div class="notice notice-warning" role="note">
+        <svg class="notice-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 3 2 21h20L12 3Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"></path>
+          <path d="M12 9v5m0 3h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path>
+        </svg>
+        <p>A minimum payment may leave part of the balance unpaid. Interest may continue to apply, and the interest-free period may no longer apply.</p>
       </div>
-      <p class="assumptions">Assumptions: 30 days, a 365-day year, no new transactions, and no interest on tax or fees. Full payment shows no new illustrative interest; previously accrued or unbilled amounts are not modeled.</p>
+      <details class="info-details">
+        <summary>How minimum payments affect interest</summary>
+        <div class="info-details-content">
+          <ul>
+            <li><strong>Interest-free period:</strong> If it is lost, interest may apply from transaction dates, depending on issuer terms.</li>
+            <li><strong>Different rates:</strong> Retail purchases, cash advances, and other transaction types may have different APRs.</li>
+            <li><strong>Over time:</strong> If a balance carries over between billing cycles, interest may compound under issuer terms.</li>
+            <li><strong>Illustrative minimum:</strong> The default 5% is an illustrative setting; issuers set their own minimum-due terms.</li>
+          </ul>
+        </div>
+      </details>
+      <p class="assumptions">Assumptions: selected interest period, a 365-day year, no new transactions, and no interest on tax or fees. GST uses an illustrative 18% rate. Full payment shows no new illustrative interest; previously accrued or unbilled amounts are not modeled.</p>
+      <details class="info-details">
+        <summary>Other possible charges (not included)</summary>
+        <div class="info-details-content">
+          <p>Annual fees, over-limit fees, cash-advance fees, foreign-currency markup, EMI charges, and payment-return fees are not included in this calculation.</p>
+        </div>
+      </details>
     </section>
 
     <details id="missed-scenario" class="optional-card">
-      <summary>What if I miss next month's payment?</summary>
+      <summary>Explore a missed-payment scenario</summary>
       <div class="optional-content">
         <div class="section-heading">
           <div>
             <p class="eyebrow">SCENARIO B</p>
-            <h2>What happens if you miss the next payment?</h2>
+            <h2>How a missed payment could affect the balance</h2>
           </div>
         </div>
 
@@ -148,22 +214,32 @@
           <dl class="breakdown">
             <div><dt>Starting balance from Scenario A</dt><dd id="missed-starting-balance">—</dd></div>
             <div><dt>Additional interest</dt><dd id="missed-interest">—</dd></div>
-            <div><dt>GST on interest <span class="muted">(assumed 18%)</span></dt><dd id="missed-gst-interest">—</dd></div>
+            <div><dt>GST on interest <span class="muted">(illustrative 18%)</span></dt><dd id="missed-gst-interest">—</dd></div>
             <div><dt>Late-payment fee</dt><dd id="missed-late-fee">—</dd></div>
-            <div><dt>GST on late-payment fee <span class="muted">(assumed 18%)</span></dt><dd id="missed-gst-fee">—</dd></div>
+            <div><dt>GST on late-payment fee <span class="muted">(illustrative 18%)</span></dt><dd id="missed-gst-fee">—</dd></div>
             <div class="breakdown-total"><dt>Total additional charges</dt><dd id="missed-total">—</dd></div>
           </dl>
         </div>
 
-        <div class="notice notice-warning">
-          <p>Late fees depend on your card issuer and outstanding amount. ₹750 is illustrative, not a universal bank charge. This scenario assumes the payment remains unpaid beyond the relevant period.</p>
+        <div class="notice notice-warning" role="note">
+          <svg class="notice-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 3 2 21h20L12 3Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"></path>
+            <path d="M12 9v5m0 3h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path>
+          </svg>
+          <p>A missed payment may lead to additional interest or late-payment charges, depending on issuer terms.</p>
         </div>
-        <p class="assumptions">Scenario B uses Scenario A's estimated balance and unpaid principal. No interest is charged on tax or fees. Period: 30 days at a 365-day basis.</p>
+        <details class="info-details">
+          <summary>RBI past-due timing and illustrative fees</summary>
+          <div class="info-details-content">
+            <p>RBI rules allow an issuer to report an account as past due or apply penal charges after it has remained overdue for more than three days. This does not guarantee a fee-free period of three days. Late fees depend on issuer terms and the post-due outstanding; the listed options are illustrative, not RBI-prescribed.</p>
+          </div>
+        </details>
+        <p class="assumptions">Scenario B uses Scenario A's selected interest period and unpaid principal. No interest is charged on tax or fees. Day-count basis: 365.</p>
       </div>
     </details>
 
     <footer class="page-footer">
-      <p>This educational simulator is not a bank statement or financial advice. Actual charges depend on issuer terms, transaction history, payment timing, billing cycle and applicable regulations.</p>
+      <p>This educational estimate is not a bank statement or financial advice. Actual billing depends on transaction dates, payment dates, payment allocation, refunds, reversals, issuer-specific terms, and applicable regulations.</p>
       <p id="engine-status" class="engine-status" role="status">Loading calculation engine…</p>
     </footer>
   </main>

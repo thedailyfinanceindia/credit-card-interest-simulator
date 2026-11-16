@@ -3,8 +3,11 @@
 #include "domain/money.hpp"
 #include "domain/rate.hpp"
 
+#include <charconv>
+#include <cstdint>
 #include <string>
 #include <string_view>
+#include <system_error>
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/emscripten.h>
@@ -53,6 +56,24 @@ ccsim::Result<ccsim::Rate> parse_rate(const char* value) {
     return ccsim::Rate::parse_percent(value);
 }
 
+ccsim::Result<std::uint32_t> parse_period_days(const char* value) {
+    if (value == nullptr || value[0] == '\0') {
+        return ccsim::Result<std::uint32_t>::failure("Please enter the interest period in days");
+    }
+
+    const std::string_view text(value);
+    std::uint32_t days = 0;
+    const auto parsed = std::from_chars(text.data(), text.data() + text.size(), days);
+    if (parsed.ec == std::errc::result_out_of_range) {
+        return ccsim::Result<std::uint32_t>::failure("Please enter a smaller interest period");
+    }
+    if (parsed.ec != std::errc{} || parsed.ptr != text.data() + text.size()) {
+        return ccsim::Result<std::uint32_t>::failure(
+            "Please enter a whole number of days for the interest period");
+    }
+    return ccsim::Result<std::uint32_t>::success(days);
+}
+
 std::string currency(const ccsim::Money& value) {
     return value.to_string();
 }
@@ -66,7 +87,8 @@ CCSIM_KEEPALIVE const char* ccsim_main_result(
     const char* annual_rate,
     int payment_mode,
     const char* custom_payment,
-    const char* minimum_due_percent) {
+    const char* minimum_due_percent,
+    const char* interest_period_days) {
     const auto statement = parse_money(statement_amount);
     if (!statement.has_value()) {
         return failure(statement.error());
@@ -74,6 +96,10 @@ CCSIM_KEEPALIVE const char* ccsim_main_result(
     const auto apr = parse_rate(annual_rate);
     if (!apr.has_value()) {
         return failure(apr.error());
+    }
+    const auto period_days = parse_period_days(interest_period_days);
+    if (!period_days.has_value()) {
+        return failure(period_days.error());
     }
     if (payment_mode < 0 || payment_mode > 2) {
         return failure("Choose a valid payment mode");
@@ -91,7 +117,7 @@ CCSIM_KEEPALIVE const char* ccsim_main_result(
         static_cast<ccsim::PaymentMode>(payment_mode),
         std::nullopt,
         minimum_rate.value(),
-        30,
+        period_days.value(),
         365,
         ccsim::Rate::from_basis_points(1800).value()};
 
@@ -122,7 +148,8 @@ CCSIM_KEEPALIVE const char* ccsim_missed_result(
     const char* starting_balance,
     const char* interest_bearing_principal,
     const char* annual_rate,
-    const char* late_fee) {
+    const char* late_fee,
+    const char* interest_period_days) {
     const auto balance = parse_money(starting_balance);
     if (!balance.has_value()) {
         return failure(balance.error());
@@ -135,6 +162,10 @@ CCSIM_KEEPALIVE const char* ccsim_missed_result(
     if (!apr.has_value()) {
         return failure(apr.error());
     }
+    const auto period_days = parse_period_days(interest_period_days);
+    if (!period_days.has_value()) {
+        return failure(period_days.error());
+    }
     const auto fee = parse_money(late_fee);
     if (!fee.has_value()) {
         return failure(fee.error());
@@ -144,7 +175,7 @@ CCSIM_KEEPALIVE const char* ccsim_missed_result(
         balance.value(),
         principal.value(),
         apr.value(),
-        30,
+        period_days.value(),
         365,
         fee.value(),
         ccsim::Rate::from_basis_points(1800).value(),

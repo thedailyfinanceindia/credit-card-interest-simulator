@@ -3,6 +3,9 @@
 const mainForm = document.querySelector("#main-form");
 const statementAmount = document.querySelector("#statement-amount");
 const annualRate = document.querySelector("#annual-rate");
+const interestPeriodDays = document.querySelector("#interest-period-days");
+const interestPeriodWrap = document.querySelector("#interest-period-wrap");
+const periodNote = document.querySelector("#period-note");
 const minimumRate = document.querySelector("#minimum-rate");
 const customPayment = document.querySelector("#custom-payment");
 const minimumRateField = document.querySelector("#minimum-rate-field");
@@ -20,6 +23,12 @@ let currentMainResult;
 
 function selectedPaymentMode() {
   return Number(mainForm.querySelector('input[name="payment-mode"]:checked').value);
+}
+
+function selectedInterestPeriodDays() {
+  return selectedPaymentMode() === 1
+    ? interestPeriodDays.defaultValue
+    : interestPeriodDays.value;
 }
 
 function setCurrency(id, amount) {
@@ -58,7 +67,8 @@ function readMainResult() {
     annualRate.value,
     selectedPaymentMode(),
     customPayment.value,
-    minimumRate.value
+    minimumRate.value,
+    selectedInterestPeriodDays()
   ]);
 }
 
@@ -102,7 +112,7 @@ function renderMissed() {
     return;
   }
   if (!currentMainResult) {
-    showError(missedError, "Enter valid main-calculator inputs to estimate this scenario.");
+    showError(missedError, "Review the main calculator entries to see this estimate.");
     ["missed-final-balance", "missed-starting-balance", "missed-interest",
       "missed-gst-interest", "missed-late-fee", "missed-gst-fee", "missed-total"]
       .forEach(id => document.querySelector(`#${id}`).textContent = "—");
@@ -113,7 +123,8 @@ function renderMissed() {
     currentMainResult.estimatedNextBalance,
     currentMainResult.remainingPrincipal,
     annualRate.value,
-    selectedLateFee()
+    selectedLateFee(),
+    selectedInterestPeriodDays()
   ]);
   if (!result.ok) {
     showError(missedError, result.error);
@@ -138,10 +149,16 @@ function updatePaymentFields() {
   minimumRateField.hidden = mode !== 0;
   customPaymentField.hidden = mode !== 2;
   customPayment.required = mode === 2;
+  interestPeriodDays.disabled = mode === 1;
+  interestPeriodWrap.classList.toggle("is-disabled", mode === 1);
+  periodNote.textContent = mode === 1
+    ? "Not used for Full payment"
+    : "(illustrative assumption)";
   updateMain();
 }
 
 mainForm.addEventListener("input", updateMain);
+interestPeriodDays.addEventListener("input", updateMain);
 mainForm.addEventListener("change", event => {
   if (event.target.name === "payment-mode") {
     updatePaymentFields();
@@ -165,8 +182,8 @@ lateFee.addEventListener("change", () => {
 customFee.addEventListener("input", renderMissed);
 
 if (typeof createSimulatorModule !== "function") {
-  engineStatus.textContent = "Calculation engine is unavailable. Build the WebAssembly app before opening this page.";
-  showError(mainError, "The calculation engine did not load. Follow the build instructions in the README.");
+  engineStatus.textContent = "The calculator is unavailable right now.";
+  showError(mainError, "The calculator could not load. Please refresh the page and try again.");
 } else {
   createSimulatorModule()
     .then(module => {
@@ -175,8 +192,8 @@ if (typeof createSimulatorModule !== "function") {
       updatePaymentFields();
     })
     .catch(error => {
-      engineStatus.textContent = "Calculation engine failed to load.";
-      showError(mainError, "The calculation engine failed to load. Rebuild the WebAssembly app and try again.");
+      engineStatus.textContent = "The calculator could not load.";
+      showError(mainError, "The calculator could not load. Please refresh the page and try again.");
       console.error(error);
     });
 }

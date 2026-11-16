@@ -31,7 +31,7 @@ Fields:
 - interest_paise
 - gst_on_interest_paise
 - estimated_next_balance_paise
-- calculation assumptions (30 days, 365-day basis, entered amount treated as eligible principal)
+- calculation assumptions (selected period, 45-day UI default, 365-day basis, entered amount treated as eligible principal)
 
 ## 3. MissedPaymentInput
 
@@ -60,7 +60,7 @@ Fields:
 - gst_on_late_fee_paise
 - total_additional_charges_paise
 - estimated_new_balance_paise
-- calculation assumptions (30 days, 365-day basis, GST and late-fee applicability)
+- calculation assumptions (selected period inherited from Scenario A, 45-day UI default, 365-day basis, GST and late-fee applicability)
 
 ## 5. Validation
 

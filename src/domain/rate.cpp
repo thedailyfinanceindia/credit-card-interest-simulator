@@ -6,7 +6,7 @@ namespace ccsim {
 
 Result<Rate> Rate::from_basis_points(std::int64_t basis_points) {
     if (basis_points < 0 || basis_points > kMaximumBasisPoints) {
-        return Result<Rate>::failure("Rate must be between 0% and 10,000%");
+        return Result<Rate>::failure("Please enter a rate between 0% and 10,000%");
     }
     return Result<Rate>::success(Rate(basis_points));
 }
